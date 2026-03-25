@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContractCopilot AEC — Copiloto del Ingeniero</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f2ee;
+  --surface: #ffffff;
+  --surface2: #f9f7f4;
+  --border: #e2ddd6;
+  --border2: #cdc8bf;
+  --accent: #c45c1a;
+  --accent-light: #fdf0e8;
+  --accent2: #9e4612;
+  --blue: #1a5fc4;
+  --blue-light: #e8f0fd;
+  --green: #1a7a3c;
+  --green-light: #e8f5ee;
+  --red: #c41a1a;
+  --red-light: #fde8e8;
+  --amber: #c47c1a;
+  --amber-light: #fdf5e8;
+  --text: #1a1714;
+  --text2: #6b6560;
+  --text3: #a09890;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Fraunces', serif;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 13.5px;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOP BAR */
+.topbar {
+  background: var(--text);
+  color: #fff;
+  padding: 0 20px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.5px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  background: var(--accent);
+  border-radius: 7px;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+
+.top-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.5px;
+}
+
+.top-doc {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+}
+
+.top-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.dot-green {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74,222,128,0.7);
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%,100%{opacity:1} 50%{opacity:0.4}
+}
+
+/* MAIN LAYOUT */
+.main {
+  display: grid;
+  grid-template-columns: 280px 1fr 340px;
+  flex: 1;
+  overflow: hidden;
+  gap: 0;
+}
+
+/* PANEL IZQUIERDO — Documento */
+.panel-doc {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.panel-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+
+.doc-id {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+
+.doc-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.panel-scroll {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.info-section {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.info-row:last-child { margin-bottom: 0; }
+
+.info-key {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.info-val {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.chip-amber { background: var(--amber-light); color: var(--amber); border: 1px solid #f0d5a0; }
+.chip-red { background: var(--red-light); color: var(--red); border: 1px solid #f0b0a0; }
+.chip-green { background: var(--green-light); color: var(--green); border: 1px solid #a0d0b0; }
+.chip-blue { background: var(--blue-light); color: var(--blue); border: 1px solid #a0c0f0; }
+
+.normas-wrap {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.norma-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid #c0d5f5;
+  border-radius: 4px;
+  padding: 3px 8px;
+  margin: 3px 3px 0 0;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.norma-tag:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.obs-section {
+  padding: 12px 16px;
+}
+
+.obs-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+  padding: 8px 10px;
+  margin-bottom: 7px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text2);
+}
+
+.obs-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 3px;
+}
+
+/* PANEL CENTRAL — Chat */
+.panel-chat {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.chat-header {
+  padding: 12px 18px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-header-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.chat-header-sub {
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: auto;
+  font-family: var(--mono);
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.msg { display: flex; gap: 10px; animation: fadeUp 0.25s ease; }
+.msg.user { flex-direction: row-reverse; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.avatar {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.avatar.ai {
+  background: var(--accent);
+  color: #fff;
+}
+
+.avatar.user {
+  background: var(--text);
+  color: #fff;
+}
+
+.bubble {
+  max-width: 78%;
+  padding: 11px 14px;
+  border-radius: var(--radius);
+  line-height: 1.65;
+  font-size: 13px;
+}
+
+.msg.ai .bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top-left-radius: 2px;
+  color: var(--text);
+}
+
+.msg.user .bubble {
+  background: var(--text);
+  color: #f5f2ee;
+  border-top-right-radius: 2px;
+}
+
+.bubble strong { color: var(--accent); }
+.msg.user .bubble strong { color: #ffd4b0; }
+
+.norma-inline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid #c0d5f5;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.bubble-highlight {
+  background: var(--accent-light);
+  border-left: 2px solid var(--accent);
+  padding: 8px 10px;
+  margin: 8px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 12px;
+}
+
+.ts {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-top: 3px;
+  padding-left: 40px;
+}
+
+.msg.user .ts { text-align: right; padding-right: 40px; padding-left: 0; }
+
+.typing {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.typing-dots {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  border-top-left-radius: 2px;
+  padding: 12px 16px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.typing-dots span {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text3);
+  animation: bounce 1.2s infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%,60%,100%{ transform:translateY(0); background: var(--text3); }
+  30%{ transform:translateY(-5px); background: var(--accent); }
+}
+
+/* Quick actions */
+.quick-bar {
+  padding: 10px 18px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.qbtn {
+  font-family: var(--sans);
+  font-size: 11px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.qbtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+/* Input area */
+.input-area {
+  padding: 12px 18px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.api-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.api-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.api-input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.api-input:focus { border-color: var(--accent); }
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.msg-input {
+  flex: 1;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 13px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  resize: none;
+  min-height: 42px;
+  max-height: 110px;
+  outline: none;
+  transition: border-color 0.15s;
+  scrollbar-width: thin;
+}
+
+.msg-input:focus { border-color: var(--accent); }
+.msg-input::placeholder { color: var(--text3); }
+
+.send-btn {
+  width: 42px; height: 42px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.send-btn:hover { background: var(--accent2); }
+.send-btn:disabled { background: var(--border); cursor: not-allowed; }
+
+.input-hint {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-top: 5px;
+}
+
+/* PANEL DERECHO — Borrador vivo */
+.panel-draft {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.draft-header {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.draft-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.draft-version {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+.draft-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.draft-text {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--text);
+  white-space: pre-wrap;
+  font-family: var(--sans);
+}
+
+.draft-text .norma-ref {
+  font-family: var(--mono);
+  font-size: 11px;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid #c0d5f5;
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.draft-updated {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--green);
+  padding: 4px 16px;
+  border-top: 1px solid var(--border);
+  background: var(--green-light);
+  display: none;
+}
+
+.draft-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.approve-btn {
+  width: 100%;
+  background: var(--green);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 11px;
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.2px;
+}
+
+.approve-btn:hover { background: #156032; transform: translateY(-1px); }
+.approve-btn:disabled { background: var(--border); color: var(--text3); cursor: not-allowed; transform: none; }
+
+.copy-btn {
+  width: 100%;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px;
+  font-family: var(--sans);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.copy-btn:hover { border-color: var(--text2); color: var(--text); }
+
+.approved-banner {
+  display: none;
+  background: var(--green-light);
+  border: 1px solid #a0d0b0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--green);
+  text-align: center;
+  font-weight: 500;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">
+    <div class="logo-icon">🏗</div>
+    ContractCopilot AEC
+  </div>
+  <div class="top-badge">AECODE 2026</div>
+  <div class="top-status">
+    <div class="dot-green"></div>
+    IA Activa
+  </div>
+  <div class="top-doc" id="topDoc">Cargando documento...</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- PANEL IZQUIERDO -->
+  <div class="panel-doc">
+    <div class="panel-header">
+      <div class="panel-label">Documento recibido</div>
+      <div class="doc-id" id="docId">—</div>
+      <div class="doc-title" id="docTitle">—</div>
+    </div>
+    <div class="panel-scroll">
+      <div class="info-section">
+        <div class="panel-label">Datos del caso</div>
+        <div class="info-row">
+          <span class="info-key">Tipo</span>
+          <span class="info-val" id="docTipo">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Fecha recep.</span>
+          <span class="info-val" id="docFecha">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Plazo resp.</span>
+          <span class="info-val chip chip-red" id="docPlazo">—</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Estado</span>
+          <span class="chip chip-amber" id="docEstado">BORRADOR LISTO</span>
+        </div>
+      </div>
+
+      <div class="normas-wrap">
+        <div class="panel-label">Normas identificadas</div>
+        <div id="normasList"></div>
+      </div>
+
+      <div class="obs-section">
+        <div class="panel-label">Observaciones detectadas</div>
+        <div id="obsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL CENTRAL — CHAT -->
+  <div class="panel-chat">
+    <div class="chat-header">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent)"></div>
+      <div class="chat-header-title">Asistente técnico contractual</div>
+      <div class="chat-header-sub" id="chatSub">Contexto cargado</div>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="quick-bar">
+      <button class="qbtn" onclick="quick('¿Qué artículos exactos del RNE sustentan el borrador actual?')">📋 Citar normativa</button>
+      <button class="qbtn" onclick="quick('¿Hay riesgo de penalidad contractual? Evalúa el plazo.')">⚠️ Riesgo contractual</button>
+      <button class="qbtn" onclick="quick('Redacta la respuesta en tono más formal y técnico para envío oficial.')">✍️ Formalizar</button>
+      <button class="qbtn" onclick="quick('¿Qué documentos de respaldo debo adjuntar?')">📎 Respaldo</button>
+      <button class="qbtn" onclick="quick('Dame un resumen ejecutivo de 3 puntos de nuestra posición técnica.')">🎯 Resumen</button>
+    </div>
+
+    <div class="input-area">
+      <div class="api-row">
+        <span class="api-label">🔑 API Key OpenAI:</span>
+        <input type="password" class="api-input" id="apiKey" placeholder="sk-..." oninput="checkKey()">
+      </div>
+      <div class="input-row">
+        <textarea class="msg-input" id="userInput"
+          placeholder="Consulta al asistente sobre el documento, la normativa o el borrador..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="sendBtn" onclick="sendMsg()" disabled>▶</button>
+      </div>
+      <div class="input-hint">Enter para enviar · Shift+Enter nueva línea</div>
+    </div>
+  </div>
+
+  <!-- PANEL DERECHO — BORRADOR VIVO -->
+  <div class="panel-draft">
+    <div class="draft-header">
+      <div class="draft-title">Borrador de respuesta</div>
+      <div class="draft-version" id="draftVersion">v1 — IA inicial</div>
+    </div>
+    <div class="draft-body">
+      <div class="draft-text" id="draftText">Cargando borrador...</div>
+    </div>
+    <div class="draft-updated" id="draftUpdated">✓ Borrador actualizado</div>
+    <div class="draft-actions">
+      <div class="approved-banner" id="approvedBanner">✓ Respuesta aprobada y guardada en Notion</div>
+      <button class="approve-btn" id="approveBtn" onclick="approveResponse()">✓ Aprobar y guardar en Notion</button>
+      <button class="copy-btn" onclick="copyDraft()">Copiar borrador</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── ESTADO GLOBAL ──────────────────────────────────────────────
+let docData = {};
+let conversationHistory = [];
+let draftVersion = 1;
+let currentDraft = '';
+let typingEl = null;
+let notionWebhookUrl = ''; // Se configura por URL param o manual
+
+// ── LEER PARÁMETROS DE URL ─────────────────────────────────────
+function getParam(name) {
+  return new URLSearchParams(window.location.search).get(name) || '';
+}
+
+function initFromURL() {
+  const docId    = getParam('docId')    || 'CARTA-023-2026-SUP';
+  const tipo     = getParam('tipo')     || 'No conformidad';
+  const fecha    = getParam('fecha')    || '25/03/2026';
+  const plazo    = getParam('plazo')    || '28/03/2026';
+  const titulo   = getParam('titulo')   || 'Observaciones técnicas — Hospital SMP Semana 12';
+  const normas   = getParam('normas')   || 'RNE E.060,RNE A.050,RNE A.120,ACI 318-19,ASTM C39';
+  const borrador = getParam('borrador') || getBorradorDefault();
+  const obs      = getParam('obs')      || getObsDefault();
+  notionWebhookUrl = getParam('webhook') || '';
+
+  docData = { docId, tipo, fecha, plazo, titulo, normas, borrador, obs };
+
+  // Poblar UI
+  document.getElementById('docId').textContent = docId;
+  document.getElementById('docTitle').textContent = titulo;
+  document.getElementById('docTipo').textContent = tipo;
+  document.getElementById('docFecha').textContent = fecha;
+  document.getElementById('docPlazo').textContent = plazo + ' ⚠';
+  document.getElementById('topDoc').textContent = docId + ' · ' + tipo;
+  document.getElementById('chatSub').textContent = 'Contexto: ' + docId + ' · ' + normas.split(',').slice(0,2).join(', ');
+
+  // Normas
+  const normasList = document.getElementById('normasList');
+  normas.split(',').forEach(n => {
+    const tag = document.createElement('span');
+    tag.className = 'norma-tag';
+    tag.textContent = n.trim();
+    tag.onclick = () => quick('Explica qué establece ' + n.trim() + ' y cómo aplica a este caso.');
+    normasList.appendChild(tag);
+  });
+
+  // Observaciones
+  const obsList = document.getElementById('obsList');
+  obs.split('|').forEach((o, i) => {
+    if (!o.trim()) return;
+    const div = document.createElement('div');
+    div.className = 'obs-item';
+    div.innerHTML = `<div class="obs-num">OBS. N°${i+1}</div>${o.trim()}`;
+    obsList.appendChild(div);
+  });
+
+  // Borrador inicial
+  currentDraft = borrador;
+  renderDraft(borrador);
+
+  // Mensaje de bienvenida
+  addMsg('ai', `Hola, Ing. Residente. He analizado el documento <strong>${docId}</strong>.\n\n<div class="bubble-highlight">He identificado <strong>${obs.split('|').filter(o=>o.trim()).length} observaciones</strong> y preparado un borrador con citas a <strong>${normas.split(',').length} normas técnicas</strong>. El plazo de respuesta es <strong>${plazo}</strong>.</div>\nPuede consultarme sobre cualquier punto del documento, pedir que refuerce argumentos, cambie el tono, o formalice la respuesta. Cuando esté conforme, apruebe el borrador del panel derecho.`);
+}
+
+function getBorradorDefault() {
+  return `San Martín de Porres, 25 de marzo de 2026
+
+Señor Roberto Flores Vega
+Supervisor de Obra — Consorcio Supervisor HSM
+
+Ref.: Respuesta a Carta N°023-2026-SUP-OBRA
+
+Estimado Señor Flores Vega,
+
+En atención a las observaciones técnicas de su carta del 19 de marzo de 2026, el contratista expone lo siguiente:
+
+ESTRUCTURAS — Obs. N°1 (Resistencia concreto):
+Conforme al Art. 5.1.3 del RNE E.060, la evaluación definitiva se realiza a los 28 días. Se programan ensayos adicionales y revisión de procedimientos de curado.
+
+ESTRUCTURAS — Obs. N°2 (Cangrejeras):
+Se procederá a reparación mediante mortero estructural según Art. 5.12.1 del RNE E.060, restaurando la sección transversal afectada.
+
+ESTRUCTURAS — Obs. N°3 (Estribos):
+Se incorporarán estribos adicionales conforme al Art. 11.5.8.1 del RNE E.060 y los planos de diseño estructural.
+
+ARQUITECTURA — Obs. N°4 (Corredores):
+Se ampliarán los corredores a mínimo 2.40m conforme al RNE A.050 para flujo expedito de equipos médicos.
+
+ARQUITECTURA — Obs. N°5 (Rampas):
+Se instalarán rampas de acceso cumpliendo el RNE A.120 sobre accesibilidad universal.
+
+SANITARIAS — Obs. N°6 (Pendiente tuberías):
+Se corregirán los ángulos de instalación para alcanzar el 1% reglamentado.
+
+CONTRACTUAL — Obs. N°7 (Cronograma):
+Se presentará informe de descargo considerando causas fortuitas y plan de ajuste para recuperar el avance.
+
+Atentamente,
+Juan Pérez — Ingeniero Residente
+Constructora Andina SAC`;
+}
+
+function getObsDefault() {
+  return 'Resistencia concreto f\'c insuficiente en vigas nivel 2|Cangrejeras en columnas — comprometen capacidad portante|Espaciado incorrecto de estribos|Ancho de corredores insuficiente (< 2.40m)|Omisión de rampas de acceso principal|Pendiente de tuberías desagüe incumple mínimo|Retraso en cronograma — riesgo penalidad';
+}
+
+// ── RENDER BORRADOR ────────────────────────────────────────────
+function renderDraft(text) {
+  const el = document.getElementById('draftText');
+  el.innerHTML = text
+    .replace(/\n/g, '<br>')
+    .replace(/(RNE [A-Z]\.\d+[^\s,<\n]*)/g, '<span class="norma-ref">$1</span>')
+    .replace(/(ACI \d+[^\s,<\n]*)/g, '<span class="norma-ref">$1</span>')
+    .replace(/(ASTM [A-Z]\d+[^\s,<\n]*)/g, '<span class="norma-ref">$1</span>');
+}
+
+function updateDraft(newText) {
+  currentDraft = newText;
+  draftVersion++;
+  document.getElementById('draftVersion').textContent = 'v' + draftVersion + ' — revisado por IA';
+  renderDraft(newText);
+  const upd = document.getElementById('draftUpdated');
+  upd.style.display = 'block';
+  setTimeout(() => { upd.style.display = 'none'; }, 3000);
+}
+
+// ── CHAT ───────────────────────────────────────────────────────
+const SYSTEM_PROMPT = () => `Eres ContractCopilot AEC, asistente especializado en gestión contractual y técnica para obras de construcción en Perú (sector AEC).
+
+DOCUMENTO ACTUAL:
+- ID: ${docData.docId}
+- Tipo: ${docData.tipo}
+- Fecha recepción: ${docData.fecha}
+- Plazo de respuesta: ${docData.plazo} (URGENTE)
+- Título: ${docData.titulo}
+- Normas aplicables: ${docData.normas}
+- Observaciones: ${docData.obs}
+
+BORRADOR ACTUAL (versión ${draftVersion}):
+${currentDraft}
+
+TU ROL:
+1. Ayudar al ingeniero a entender y responder el documento técnico
+2. Citar artículos específicos de normas (RNE, ACI, ASTM, ISO)
+3. Fortalecer argumentos del borrador o generar versiones mejoradas
+4. Evaluar riesgos contractuales y penalidades
+5. Cuando el ingeniero pida una nueva versión del borrador completo, termina tu respuesta con la etiqueta exacta: [BORRADOR_ACTUALIZADO] seguida del texto completo del nuevo borrador
+
+REGLAS:
+- Siempre cita artículos específicos con número exacto
+- Usa terminología técnica de construcción en español peruano  
+- Si hay riesgo contractual, adviértelo con claridad
+- Para respuestas formales usa formato carta técnica profesional
+- Sé conciso y técnicamente preciso`;
+
+async function sendMsg() {
+  const input = document.getElementById('userInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const apiKey = document.getElementById('apiKey').value.trim();
+  if (!apiKey) return;
+
+  addMsg('user', text);
+  input.value = '';
+  input.style.height = 'auto';
+  conversationHistory.push({ role: 'user', content: text });
+
+  showTyping();
+  document.getElementById('sendBtn').disabled = true;
+
+  try {
+    const res = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + apiKey
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o',
+        max_tokens: 1500,
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT() },
+          ...conversationHistory
+        ]
+      })
+    });
+
+    const data = await res.json();
+    removeTyping();
+
+    if (data.error) {
+      addMsg('ai', '⚠️ Error de API: ' + data.error.message);
+    } else {
+      let reply = data.choices[0].message.content;
+      conversationHistory.push({ role: 'assistant', content: reply });
+
+      // Detectar si hay borrador actualizado
+      if (reply.includes('[BORRADOR_ACTUALIZADO]')) {
+        const parts = reply.split('[BORRADOR_ACTUALIZADO]');
+        const chatPart = parts[0].trim();
+        const newDraft = parts[1].trim();
+        addMsg('ai', chatPart + '\n\n<span style="color:var(--green);font-size:11px;font-family:var(--mono)">✓ Borrador actualizado en el panel derecho</span>');
+        updateDraft(newDraft);
+      } else {
+        addMsg('ai', reply);
+      }
+    }
+  } catch (err) {
+    removeTyping();
+    addMsg('ai', '⚠️ Error de conexión. Verifica tu API key.');
+  }
+
+  document.getElementById('sendBtn').disabled = false;
+  checkKey();
+}
+
+function addMsg(role, html) {
+  const msgs = document.getElementById('messages');
+  const time = new Date().toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' });
+
+  const formatted = html
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>')
+    .replace(/(RNE [A-Z]\.\d+[A-Z0-9\.]*)/g, '<span class="norma-inline">$1</span>')
+    .replace(/(ACI \d+[A-Z0-9\-]*)/g, '<span class="norma-inline">$1</span>')
+    .replace(/(ASTM [A-Z]\d+[A-Z0-9\-]*)/g, '<span class="norma-inline">$1</span>');
+
+  const label = role === 'ai' ? 'CC' : 'IR';
+  const tsLabel = role === 'ai' ? time + ' — ContractCopilot' : time + ' — Ing. Residente';
+
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = `
+    <div class="avatar ${role}">${label}</div>
+    <div>
+      <div class="bubble">${formatted}</div>
+      <div class="ts">${tsLabel}</div>
+    </div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('messages');
+  typingEl = document.createElement('div');
+  typingEl.className = 'typing';
+  typingEl.innerHTML = `<div class="avatar ai">CC</div><div class="typing-dots"><span></span><span></span><span></span></div>`;
+  msgs.appendChild(typingEl);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function removeTyping() {
+  if (typingEl) { typingEl.remove(); typingEl = null; }
+}
+
+function quick(text) {
+  document.getElementById('userInput').value = text;
+  autoResize(document.getElementById('userInput'));
+  document.getElementById('userInput').focus();
+}
+
+// ── APROBACIÓN ─────────────────────────────────────────────────
+async function approveResponse() {
+  document.getElementById('approveBtn').disabled = true;
+  document.getElementById('approveBtn').textContent = 'Guardando en Notion...';
+
+  const payload = {
+    docId: docData.docId,
+    respuestaFinal: currentDraft,
+    aprobadoPor: 'Ing. Residente',
+    fechaAprobacion: new Date().toISOString(),
+    version: draftVersion
+  };
+
+  if (notionWebhookUrl) {
+    try {
+      await fetch(notionWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    } catch (e) {
+      console.warn('Webhook error:', e);
+    }
+  }
+
+  document.getElementById('approvedBanner').style.display = 'block';
+  document.getElementById('approveBtn').style.display = 'none';
+  document.getElementById('docEstado').textContent = 'APROBADO';
+  document.getElementById('docEstado').className = 'chip chip-green';
+
+  addMsg('ai', '✅ <strong>Respuesta aprobada.</strong> La versión ' + draftVersion + ' del borrador ha sido guardada en Notion. Número de referencia: <span class="norma-inline">RESP-' + docData.docId + '-' + new Date().toISOString().slice(0,10) + '</span>');
+}
+
+function copyDraft() {
+  navigator.clipboard.writeText(currentDraft).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✓ Copiado';
+    setTimeout(() => { btn.textContent = 'Copiar borrador'; }, 2000);
+  });
+}
+
+// ── HELPERS ────────────────────────────────────────────────────
+function checkKey() {
+  document.getElementById('sendBtn').disabled = document.getElementById('apiKey').value.trim().length < 20;
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMsg(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
+// ── INIT ───────────────────────────────────────────────────────
+initFromURL();
+</script>
+</body>
+</html>
