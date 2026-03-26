@@ -124,7 +124,7 @@ body {
 /* ── MAIN ── */
 .main {
   display: grid;
-  grid-template-columns: 268px 1fr 320px;
+  grid-template-columns: 268px 1fr;
   flex: 1;
   overflow: hidden;
 }
@@ -660,9 +660,10 @@ body {
     <div class="quick-bar">
       <button class="qbtn" onclick="quick('¿Qué artículos exactos del RNE sustentan el borrador actual?')">📋 Citar normativa</button>
       <button class="qbtn" onclick="quick('¿Hay riesgo de penalidad contractual? Evalúa el plazo.')">⚠️ Riesgo contractual</button>
-      <button class="qbtn" onclick="quick('Genera el borrador completo actualizado en tono formal para envío oficial.')">✍️ Formalizar borrador</button>
+      <button class="qbtn" onclick="quick('Genera el borrador completo actualizado en tono formal para envío oficial.')">✍️ Generar borrador</button>
       <button class="qbtn" onclick="quick('¿Qué documentos de respaldo debo adjuntar?')">📎 Respaldo</button>
       <button class="qbtn" onclick="quick('Dame un resumen ejecutivo de 3 puntos de nuestra posición técnica.')">🎯 Resumen</button>
+      <button class="qbtn" style="background:var(--green);color:#0a1a15;border-color:var(--green);font-weight:600" onclick="approveResponse()">✓ Aprobar respuesta</button>
     </div>
 
     <div class="input-area">
@@ -683,21 +684,7 @@ body {
   </div>
 
   <!-- PANEL DERECHO -->
-  <div class="panel-right">
-    <div class="draft-top">
-      <div class="draft-title">Borrador de respuesta</div>
-      <div class="draft-ver" id="draftVer">v1 — IA inicial</div>
-    </div>
-    <div class="draft-body">
-      <div class="draft-text" id="draftText">Cargando borrador...</div>
-    </div>
-    <div class="updated-banner" id="updatedBanner">✓ Borrador actualizado — v<span id="verNum">1</span></div>
-    <div class="draft-footer">
-      <div class="approved-ok" id="approvedOk">✓ Respuesta aprobada y guardada en Notion</div>
-      <button class="approve-btn" id="approveBtn" onclick="approveResponse()">✓ Aprobar y guardar en Notion</button>
-      <button class="copy-btn" onclick="copyDraft()">Copiar borrador completo</button>
-    </div>
-  </div>
+
 
 </div>
 
@@ -719,61 +706,9 @@ const normasPorObs = {
   6: ['Contrato Cláusula 18', 'RNE G.030']
 };
 
-const NOTION_TOKEN = 'ntn_y20264378763V5hz97npHhFjnYkZYEWc9O4fYU9e6vf8Sk';
-
 function getP(n) { return new URLSearchParams(window.location.search).get(n) || ''; }
 
-async function init() {
-  const pageId = getP('pageId');
-  if (pageId) {
-    document.getElementById('topDoc').textContent = 'Cargando desde Notion...';
-    await loadFromNotion(pageId);
-  } else {
-    loadDefault();
-  }
-}
-
-async function loadFromNotion(pageId) {
-  try {
-    const pageRes = await fetch(`https://api.notion.com/v1/pages/${pageId}`, {
-      headers: {
-        'Authorization': 'Bearer ' + NOTION_TOKEN,
-        'Notion-Version': '2022-06-28'
-      }
-    });
-    const page = await pageRes.json();
-    const props = page.properties;
-
-    const blocksRes = await fetch(`https://api.notion.com/v1/blocks/${pageId}/children`, {
-      headers: {
-        'Authorization': 'Bearer ' + NOTION_TOKEN,
-        'Notion-Version': '2022-06-28'
-      }
-    });
-    const blocksData = await blocksRes.json();
-    const borrador = blocksData.results
-      .map(b => b.paragraph?.text?.map(t => t.plain_text).join('') || '')
-      .filter(t => t.trim())
-      .join('\n\n');
-
-    const docId  = props['N° de documento']?.title?.[0]?.plain_text || pageId;
-    const tipo   = props['Tipo de documento']?.select?.name || 'Carta de supervisión';
-    const fecha  = props['Fecha de recepción']?.date?.start?.slice(0,10) || '—';
-    const plazo  = props['Plazo de respuesta']?.date?.start?.slice(0,10) || '—';
-    const normas = props['Normas citadas']?.rich_text?.[0]?.plain_text || 'RNE E.060,RNE A.050';
-    const obs    = props['Observaciones extraídas']?.rich_text?.[0]?.plain_text || '';
-
-    docData = { docId, tipo, fecha, plazo, titulo: 'Respuesta a ' + docId, normas, borrador, obs, pageId };
-    poblarUI(docData);
-
-  } catch(e) {
-    console.error('Error Notion:', e);
-    addMsg('ai', '⚠️ Error al cargar desde Notion. Usando datos de demo.');
-    loadDefault();
-  }
-}
-
-function loadDefault() {
+function init() {
   const docId    = getP('docId')    || 'CARTA-023-2026-SUP';
   const tipo     = getP('tipo')     || 'No conformidad';
   const fecha    = getP('fecha')    || '25/03/2026';
@@ -783,50 +718,44 @@ function loadDefault() {
   const borrador = getP('borrador') || defaultBorrador();
   const obs      = getP('obs')      || defaultObs();
   notionWebhook  = getP('webhook')  || '';
+
   docData = { docId, tipo, fecha, plazo, titulo, normas, borrador, obs };
-  poblarUI(docData);
-}
 
-function poblarUI(d) {
-  document.getElementById('docId').textContent    = d.docId;
-  document.getElementById('docTitle').textContent = d.titulo;
-  document.getElementById('docTipo').textContent  = d.tipo;
-  document.getElementById('docFecha').textContent = d.fecha;
-  document.getElementById('docPlazo').textContent = d.plazo + ' ⚠';
-  document.getElementById('topDoc').textContent   = d.docId + ' · ' + d.tipo;
-  document.getElementById('chatSub').textContent  = 'Contexto: ' + d.docId;
+  document.getElementById('docId').textContent    = docId;
+  document.getElementById('docTitle').textContent = titulo;
+  document.getElementById('docTipo').textContent  = tipo;
+  document.getElementById('docFecha').textContent = fecha;
+  document.getElementById('docPlazo').textContent = plazo + ' ⚠';
+  document.getElementById('topDoc').textContent   = docId + ' · ' + tipo;
+  document.getElementById('chatSub').textContent  = 'Contexto: ' + docId;
 
-  document.getElementById('normasList').innerHTML = '';
-  document.getElementById('obsList').innerHTML = '';
-  document.getElementById('messages').innerHTML = '';
-
-  d.normas.split(',').forEach(n => {
+  const nl = document.getElementById('normasList');
+  normas.split(',').forEach(n => {
     const t = document.createElement('span');
     t.className = 'norma-tag';
     t.textContent = n.trim();
     t.onclick = () => consultarNorma(n.trim());
-    document.getElementById('normasList').appendChild(t);
+    nl.appendChild(t);
   });
 
-  d.obs.split('|').forEach((o, i) => {
+  const ol = document.getElementById('obsList');
+  obs.split('|').forEach((o, i) => {
     if (!o.trim()) return;
-    const div = document.createElement('div');
-    div.className = 'obs-item';
-    div.id = 'obs-' + i;
-    div.innerHTML = `
+    const d = document.createElement('div');
+    d.className = 'obs-item';
+    d.id = 'obs-' + i;
+    d.innerHTML = `
       <div class="obs-num">OBS. N°${i+1}</div>
       <div class="obs-text">${o.trim()}</div>
       <div class="obs-hint">▶ Clic para analizar con IA</div>`;
-    div.onclick = () => analizarObservacion(i, o.trim());
-    document.getElementById('obsList').appendChild(div);
+    d.onclick = () => analizarObservacion(i, o.trim());
+    ol.appendChild(d);
   });
 
-  currentDraft = d.borrador;
-  renderDraft(d.borrador);
+  currentDraft = borrador;
+  renderDraft(borrador);
 
-  const nObs = d.obs.split('|').filter(x=>x.trim()).length;
-  const nNormas = d.normas.split(',').length;
-  addMsg('ai', `Hola, Ing. Residente. He analizado el documento <strong>${d.docId}</strong>.\n\n<div class="bubble-hl">Identifiqué <strong>${nObs} observaciones</strong> con citas a <strong>${nNormas} normas técnicas</strong>. Plazo límite: <strong>${d.plazo}</strong>.</div>\nHaga <strong>clic en cualquier observación</strong> del panel izquierdo para análisis automático, o en las normas para consultar su contenido. También puede escribir directamente aquí.`);
+  addMsg('ai', `Hola, Ing. Residente. He analizado el documento <strong>${docId}</strong>.\n\n<div class="bubble-hl">Identifiqué <strong>${obs.split('|').filter(x=>x.trim()).length} observaciones</strong> con citas a <strong>${normas.split(',').length} normas técnicas</strong>. Plazo límite: <strong>${plazo}</strong>.</div>\nHaga <strong>clic en cualquier observación</strong> del panel izquierdo para análisis automático, o en las normas para consultar su contenido. También puede escribir directamente aquí.`);
 }
 
 function analizarObservacion(idx, texto) {
