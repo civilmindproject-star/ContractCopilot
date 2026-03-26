@@ -4,30 +4,35 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ContractCopilot AEC — Copiloto del Ingeniero</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0a141e;
-  --surface: #13212f;
-  --surface2: #1a2a3a;
-  --surface3: #22344a;
-  --border: #2a4159;
-  --border2: #3a546f;
-  --accent: #3b9eff;
-  --accent-dark: #1f7ed9;
-  --accent-glow: rgba(59, 158, 255, 0.18);
-  --green: #22c99e;
-  --green-light: rgba(34, 201, 158, 0.12);
-  --red: #ff6b6b;
-  --red-light: rgba(255, 107, 107, 0.12);
-  --amber: #ffbb5c;
-  --amber-light: rgba(255, 187, 92, 0.12);
-  --text: #f0f7ff;
-  --text2: #a0b8d4;
-  --text3: #6b8ba8;
+  --bg: #f4f1eb;
+  --surface: #ffffff;
+  --surface2: #f9f7f3;
+  --surface3: #efe9dd;
+  --border: #e2d9cc;
+  --border2: #c8bfb0;
+  --accent: #c45c1a;
+  --accent-light: rgba(196,92,26,0.08);
+  --accent-mid: rgba(196,92,26,0.18);
+  --accent2: #2a7f62;
+  --accent2-light: rgba(42,127,98,0.1);
+  --blue: #1e5fa8;
+  --blue-light: rgba(30,95,168,0.09);
+  --amber: #b8820a;
+  --amber-light: rgba(184,130,10,0.1);
+  --red: #c0392b;
+  --red-light: rgba(192,57,43,0.09);
+  --text: #1a1410;
+  --text2: #5a4e44;
+  --text3: #9a8e84;
   --mono: 'DM Mono', monospace;
-  --sans: 'Outfit', sans-serif;
-  --radius: 12px;
+  --sans: 'DM Sans', sans-serif;
+  --display: 'Syne', sans-serif;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,244 +41,259 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--sans);
-  font-size: 14px;
+  font-size: 13.5px;
   height: 100vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
-/* TOPBAR */
+/* ── TOPBAR ── */
 .topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 56px;
+  background: var(--text);
+  padding: 0 22px;
+  height: 54px;
   display: flex;
   align-items: center;
   gap: 16px;
   flex-shrink: 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .logo {
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 17px;
-  color: var(--text);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
   display: flex;
   align-items: center;
   gap: 10px;
+  letter-spacing: -0.3px;
 }
 
 .logo-icon {
-  background: linear-gradient(135deg, var(--accent), #1f7ed9);
-  border-radius: 9px;
-  width: 34px; height: 34px;
+  background: var(--accent);
+  border-radius: 8px;
+  width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  box-shadow: 0 0 15px rgba(59,158,255,0.5);
+  font-size: 15px;
 }
 
 .top-badge {
   font-family: var(--mono);
-  font-size: 10.5px;
-  background: var(--accent-glow);
-  border: 1px solid rgba(59,158,255,0.35);
-  border-radius: 5px;
-  padding: 3px 10px;
-  color: var(--accent);
-  letter-spacing: 0.6px;
-  font-weight: 500;
+  font-size: 9px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  padding: 2px 8px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .top-right {
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .top-doc {
   font-family: var(--mono);
-  font-size: 12.5px;
-  color: var(--text3);
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
 }
 
 .status {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  color: var(--text2);
-  font-weight: 500;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  font-family: var(--sans);
 }
 
 .dot {
-  width: 8px; height: 8px;
+  width: 7px; height: 7px;
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 10px rgba(34,201,158,0.8);
-  animation: blink 2s infinite;
+  background: #4ade80;
+  animation: blink 2.5s infinite;
 }
 
-@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
-/* MAIN GRID */
+/* ── MAIN ── */
 .main {
   display: grid;
-  grid-template-columns: 280px 1fr 340px;
+  grid-template-columns: 268px 1fr 320px;
   flex: 1;
   overflow: hidden;
 }
 
-/* PANEL IZQUIERDO */
+/* ── PANEL IZQUIERDO ── */
 .panel-left {
   background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.04);
 }
 
 .p-header {
-  padding: 16px 20px 12px;
+  padding: 18px 18px 14px;
   border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #1a1410 0%, #2d2218 100%);
 }
 
 .p-label {
   font-family: var(--mono);
-  font-size: 9.5px;
-  letter-spacing: 1.6px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 7px;
+}
+
+.p-label-dark {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text3);
   margin-bottom: 8px;
-  font-weight: 500;
 }
 
 .doc-id {
   font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--accent);
   margin-bottom: 4px;
+  letter-spacing: 0.3px;
 }
 
 .doc-title {
-  font-size: 14.5px;
-  font-weight: 600;
-  line-height: 1.35;
-  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.9);
 }
 
 .p-scroll {
   flex: 1;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
-.info-block, .normas-block, .obs-block {
-  padding: 14px 20px;
+.info-block {
+  padding: 13px 18px;
   border-bottom: 1px solid var(--border);
+  background: var(--surface);
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
-  font-size: 13px;
+  margin-bottom: 6px;
 }
 .info-row:last-child { margin-bottom: 0; }
 
-.info-key { color: var(--text3); }
-.info-val { 
-  font-family: var(--mono); 
-  color: var(--text2); 
-  font-weight: 500;
-}
+.info-key { font-size: 11px; color: var(--text3); }
+.info-val { font-family: var(--mono); font-size: 11px; color: var(--text2); }
 
 .chip {
   font-family: var(--mono);
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  border: 1px solid;
+  font-size: 10px;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
 }
-.chip-amber { background: var(--amber-light); color: var(--amber); border-color: rgba(255,187,92,0.4); }
-.chip-red   { background: var(--red-light);   color: var(--red);   border-color: rgba(255,107,107,0.4); }
-.chip-green { background: var(--green-light);  color: var(--green); border-color: rgba(34,201,158,0.4); }
-.chip-blue  { background: var(--accent-glow);  color: var(--accent);border-color: rgba(59,158,255,0.4); }
+.chip-amber { background: var(--amber-light); color: var(--amber); border: 1px solid rgba(184,130,10,0.25); }
+.chip-red   { background: var(--red-light);   color: var(--red);   border: 1px solid rgba(192,57,43,0.25); }
+.chip-green { background: var(--accent2-light); color: var(--accent2); border: 1px solid rgba(42,127,98,0.25); }
+.chip-blue  { background: var(--blue-light);  color: var(--blue); border: 1px solid rgba(30,95,168,0.25); }
+
+.normas-block {
+  padding: 13px 18px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
 
 .norma-tag {
   display: inline-block;
   font-family: var(--mono);
-  font-size: 11px;
-  background: var(--accent-glow);
-  color: var(--accent);
-  border: 1px solid rgba(59,158,255,0.35);
-  border-radius: 6px;
-  padding: 5px 11px;
-  margin: 4px 4px 0 0;
+  font-size: 10px;
+  background: var(--surface);
+  color: var(--blue);
+  border: 1px solid rgba(30,95,168,0.25);
+  border-radius: 4px;
+  padding: 3px 9px;
+  margin: 3px 3px 0 0;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 .norma-tag:hover {
-  background: var(--accent);
+  background: var(--blue);
   color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(59,158,255,0.3);
+  border-color: var(--blue);
+  box-shadow: 0 2px 8px rgba(30,95,168,0.25);
+}
+
+.obs-block {
+  padding: 13px 18px;
+  background: var(--surface2);
 }
 
 .obs-item {
-  background: var(--surface2);
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-left: 4px solid var(--accent);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 10px;
+  border-left: 3px solid var(--border2);
+  border-radius: 0 8px 8px 0;
+  padding: 9px 12px;
+  margin-bottom: 7px;
   cursor: pointer;
-  transition: all 0.25s;
-  position: relative;
+  transition: all 0.18s;
 }
 
 .obs-item:hover {
-  background: var(--surface3);
-  border-color: var(--accent);
-  transform: translateX(4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+  border-left-color: var(--accent);
+  box-shadow: var(--shadow);
+  transform: translateX(2px);
 }
 
 .obs-item.active {
-  background: rgba(59,158,255,0.12);
+  background: var(--accent-light);
   border-left-color: var(--accent);
-  border-color: rgba(59,158,255,0.5);
+  border-color: rgba(196,92,26,0.2);
 }
 
 .obs-num {
   font-family: var(--mono);
-  font-size: 11px;
+  font-size: 9px;
   color: var(--accent);
-  font-weight: 600;
-  margin-bottom: 5px;
+  font-weight: 500;
+  margin-bottom: 3px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .obs-text {
-  font-size: 13.2px;
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.45;
   color: var(--text2);
 }
 
 .obs-hint {
-  font-size: 10.5px;
+  font-size: 10px;
   color: var(--text3);
-  margin-top: 6px;
+  margin-top: 4px;
   font-family: var(--mono);
 }
 
-/* PANEL CENTRAL — CHAT */
+/* ── PANEL CENTRAL ── */
 .panel-chat {
   display: flex;
   flex-direction: column;
@@ -282,22 +302,31 @@ body {
 }
 
 .chat-top {
-  padding: 14px 22px;
+  padding: 13px 20px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.chat-top-indicator {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
 }
 
 .chat-top-title {
-  font-size: 15px;
-  font-weight: 600;
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
   color: var(--text);
+  letter-spacing: -0.2px;
 }
 
 .chat-top-sub {
-  font-size: 12px;
+  font-size: 11px;
   color: var(--text3);
   margin-left: auto;
   font-family: var(--mono);
@@ -306,272 +335,257 @@ body {
 .messages {
   flex: 1;
   overflow-y: auto;
-  padding: 22px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
   scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
+  scrollbar-color: var(--border) transparent;
 }
 
-.msg { display: flex; gap: 12px; animation: fadeUp 0.3s ease; }
+.msg { display: flex; gap: 10px; animation: fadeUp 0.22s ease; }
 .msg.user { flex-direction: row-reverse; }
 
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(10px); }
+  from { opacity:0; transform:translateY(5px); }
   to   { opacity:1; transform:translateY(0); }
 }
 
 .avatar {
   width: 32px; height: 32px;
-  border-radius: 9px;
+  border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 500;
   flex-shrink: 0;
 }
-.avatar.ai   { background: linear-gradient(135deg, var(--accent), #1f7ed9); color: #fff; }
-.avatar.user { background: var(--surface3); color: var(--text2); border: 1px solid var(--border2); }
+.avatar.ai   { background: var(--text); color: #fff; }
+.avatar.user { background: var(--accent); color: #fff; }
 
 .bubble {
   max-width: 78%;
-  padding: 13px 16px;
+  padding: 12px 15px;
   border-radius: var(--radius);
-  line-height: 1.65;
-  font-size: 14px;
-}
-
-.msg.ai .bubble {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-top-left-radius: 4px;
-}
-
-.msg.user .bubble {
-  background: var(--accent-dark);
-  color: #fff;
-  border-top-right-radius: 4px;
-}
-
-.norma-inline {
-  font-family: var(--mono);
-  font-size: 11px;
-  background: rgba(59,158,255,0.15);
-  color: var(--accent);
-  border: 1px solid rgba(59,158,255,0.4);
-  border-radius: 4px;
-  padding: 2px 6px;
-}
-
-.bubble-hl {
-  background: rgba(59,158,255,0.12);
-  border-left: 3px solid var(--accent);
-  padding: 10px 12px;
-  margin: 10px 0;
-  border-radius: 0 8px 8px 0;
+  line-height: 1.7;
   font-size: 13px;
 }
 
+.msg.ai .bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top-left-radius: 2px;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.msg.user .bubble {
+  background: var(--text);
+  color: #fff;
+  border-top-right-radius: 2px;
+}
+
+.bubble strong { color: var(--accent); font-weight: 600; }
+.msg.user .bubble strong { color: #f4c49a; }
+
+.norma-inline {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  background: var(--blue-light);
+  color: var(--blue);
+  border: 1px solid rgba(30,95,168,0.2);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.bubble-hl {
+  background: var(--accent-light);
+  border-left: 2px solid var(--accent);
+  padding: 9px 11px;
+  margin: 8px 0;
+  border-radius: 0 6px 6px 0;
+  font-size: 12px;
+  color: var(--text2);
+}
+
+.ts {
+  font-size: 10px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-top: 4px;
+  padding-left: 42px;
+}
+.msg.user .ts { text-align:right; padding-right:42px; padding-left:0; }
+
+/* Typing */
+.typing { display:flex; gap:10px; align-items:center; }
+.typing-dots {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  border-top-left-radius: 2px;
+  padding: 12px 16px;
+  display: flex; gap: 5px; align-items: center;
+  box-shadow: var(--shadow);
+}
+.typing-dots span {
+  width:6px; height:6px; border-radius:50%;
+  background: var(--border2);
+  animation: bounce 1.2s infinite;
+}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes bounce {
+  0%,60%,100%{ transform:translateY(0); background:var(--border2); }
+  30%{ transform:translateY(-5px); background:var(--accent); }
+}
+
+/* Quick bar */
 .quick-bar {
-  padding: 10px 22px;
+  padding: 10px 20px;
   background: var(--surface);
   border-top: 1px solid var(--border);
-  display: flex; gap: 8px; flex-wrap: wrap;
+  display: flex; gap: 6px; flex-wrap: wrap;
 }
 
 .qbtn {
   font-family: var(--sans);
-  font-size: 12px;
+  font-size: 11px;
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 20px;
-  padding: 6px 14px;
+  padding: 5px 13px;
   color: var(--text2);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.15s;
   white-space: nowrap;
 }
 .qbtn:hover {
   border-color: var(--accent);
   color: var(--accent);
-  background: var(--accent-glow);
+  background: var(--accent-light);
 }
 
+/* Input */
 .input-area {
-  padding: 14px 22px;
+  padding: 13px 20px;
   background: var(--surface);
   border-top: 1px solid var(--border);
 }
 
 .api-row {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px; margin-bottom: 9px;
 }
-.api-label { 
-  font-family: var(--mono); 
-  font-size: 10.5px; 
-  color: var(--text3); 
-  white-space: nowrap; 
-}
+.api-label { font-family: var(--mono); font-size: 10px; color: var(--text3); white-space: nowrap; }
 .api-input {
-  flex:1; 
-  background: var(--surface2); 
-  border: 1px solid var(--border);
-  border-radius: 8px; 
-  padding: 7px 12px; 
-  font-family: var(--mono);
-  font-size: 12.5px; 
-  color: var(--text); 
-  outline: none;
+  flex:1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 10px; font-family: var(--mono);
+  font-size: 11px; color: var(--text); outline: none; transition: border-color 0.15s;
 }
 .api-input:focus { border-color: var(--accent); }
 
-.input-row { display:flex; gap:10px; align-items:flex-end; }
+.input-row { display:flex; gap:8px; align-items:flex-end; }
 
 .msg-input {
-  flex:1; 
-  background: var(--surface2); 
-  border: 1px solid var(--border);
-  border-radius: var(--radius); 
-  padding: 12px 15px; 
-  font-family: var(--sans);
-  font-size: 14px; 
-  color: var(--text); 
-  resize: none; 
-  min-height: 48px;
-  max-height: 120px; 
-  outline: none;
+  flex:1; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 10px 14px; font-family: var(--sans);
+  font-size: 13px; color: var(--text); resize: none; min-height: 42px;
+  max-height: 110px; outline: none; transition: border-color 0.15s;
+  scrollbar-width: thin;
 }
-.msg-input:focus { border-color: var(--accent); }
+.msg-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
 .msg-input::placeholder { color: var(--text3); }
 
 .send-btn {
-  width:46px; height:46px; 
-  background: var(--accent); 
-  border:none;
-  border-radius: var(--radius); 
-  color:#fff; 
-  font-size:18px; 
-  cursor:pointer;
+  width:42px; height:42px; background: var(--accent); border:none;
+  border-radius: var(--radius); color:#fff; font-size:15px; cursor:pointer;
   display:flex; align-items:center; justify-content:center;
-  box-shadow: 0 4px 15px rgba(59,158,255,0.35);
+  transition: all 0.15s; flex-shrink:0;
+  box-shadow: 0 2px 8px rgba(196,92,26,0.3);
 }
-.send-btn:hover { background: var(--accent-dark); transform: scale(1.05); }
-.send-btn:disabled { background: var(--border); box-shadow:none; cursor:not-allowed; }
+.send-btn:hover { background: #a84d14; box-shadow: 0 4px 12px rgba(196,92,26,0.4); transform: translateY(-1px); }
+.send-btn:disabled { background: var(--border); box-shadow:none; cursor:not-allowed; transform:none; }
 
-.input-hint { 
-  font-size:10.5px; 
-  color:var(--text3); 
-  font-family:var(--mono); 
-  margin-top:6px; 
-}
+.input-hint { font-size:10px; color:var(--text3); font-family:var(--mono); margin-top:5px; }
 
-/* PANEL DERECHO */
+/* ── PANEL DERECHO ── */
 .panel-right {
   background: var(--surface);
   border-left: 1px solid var(--border);
-  display: flex; 
-  flex-direction: column; 
-  overflow: hidden;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.04);
 }
 
 .draft-top {
-  padding: 16px 20px;
+  padding: 15px 18px 12px;
   border-bottom: 1px solid var(--border);
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
+  background: linear-gradient(135deg, #1a1410 0%, #2d2218 100%);
 }
 
-.draft-title { 
-  font-size: 15.5px; 
-  font-weight: 600; 
-  color: var(--text); 
+.draft-title {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.2px;
 }
-
-.draft-ver { 
-  font-family: var(--mono); 
-  font-size: 11px; 
-  color: var(--text3); 
-}
+.draft-ver { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.4); }
 
 .draft-body {
-  flex:1; 
-  overflow-y: auto; 
-  padding: 20px;
-  font-size: 13.8px;
-  line-height: 1.78;
-  color: var(--text2);
-  white-space: pre-wrap;
+  flex:1; overflow-y: auto; padding: 18px;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  background: var(--surface2);
+}
+
+.draft-text {
+  font-size: 12.5px; line-height: 1.8; color: var(--text);
+  white-space: pre-wrap; font-family: var(--sans);
 }
 
 .updated-banner {
-  display:none; 
-  font-size:11px; 
-  font-family:var(--mono);
-  color: var(--green); 
-  padding: 8px 20px;
+  display:none; font-size:10px; font-family:var(--mono);
+  color: var(--accent2); padding: 6px 18px;
   border-top: 1px solid var(--border);
-  background: var(--green-light);
+  background: var(--accent2-light);
+  letter-spacing: 0.3px;
 }
 
 .draft-footer {
-  padding: 14px 20px; 
-  border-top: 1px solid var(--border);
-  display: flex; 
-  flex-direction: column; 
-  gap: 10px;
+  padding: 13px 18px; border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 8px;
+  background: var(--surface);
 }
 
 .approve-btn {
-  width:100%; 
-  background: var(--green); 
-  color: #0a1f18;
-  border:none; 
-  border-radius: var(--radius); 
-  padding: 12px;
-  font-family: var(--sans); 
-  font-weight: 700; 
-  font-size: 14px;
-  cursor:pointer; 
-  transition: all 0.2s;
-  box-shadow: 0 4px 15px rgba(34,201,158,0.4);
+  width:100%; background: var(--accent2); color: #fff;
+  border:none; border-radius: var(--radius); padding: 12px;
+  font-family: var(--display); font-weight: 700; font-size: 13px;
+  cursor:pointer; transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(42,127,98,0.3);
+  letter-spacing: 0.2px;
 }
-.approve-btn:hover { filter:brightness(1.08); transform:translateY(-1px); }
+.approve-btn:hover { background: #236b51; box-shadow: 0 4px 14px rgba(42,127,98,0.4); transform:translateY(-1px); }
+.approve-btn:disabled { background: var(--border); color:var(--text3); box-shadow:none; cursor:not-allowed; transform:none; }
 
 .copy-btn {
-  width:100%; 
-  background:transparent; 
-  color:var(--text2);
-  border: 1px solid var(--border); 
-  border-radius: var(--radius);
-  padding: 10px; 
-  font-family: var(--sans); 
-  font-size: 13px;
-  cursor:pointer; 
-  transition: all 0.2s;
+  width:100%; background:transparent; color:var(--text2);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 8px; font-family: var(--sans); font-size: 12px;
+  cursor:pointer; transition: all 0.15s;
 }
-.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 
 .approved-ok {
-  display:none; 
-  background: var(--green-light);
-  border: 1px solid rgba(34,201,158,0.4);
-  border-radius: 8px; 
-  padding: 12px 16px;
-  font-size: 13px; 
-  color: var(--green); 
-  text-align:center; 
-  font-weight:600;
+  display:none; background: var(--accent2-light);
+  border: 1px solid rgba(42,127,98,0.25);
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 12px; color: var(--accent2); text-align:center; font-weight:600;
 }
 
-::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar { width:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { 
-  background:var(--border2); 
-  border-radius:10px; 
-}
-::-webkit-scrollbar-thumb:hover { background:#4a6a8c; }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
 </style>
 </head>
 <body>
@@ -601,7 +615,7 @@ body {
     <div class="p-scroll">
 
       <div class="info-block">
-        <div class="p-label">Datos del caso</div>
+        <div class="p-label-dark">Datos del caso</div>
         <div class="info-row">
           <span class="info-key">Tipo</span>
           <span class="info-val" id="docTipo">—</span>
@@ -621,12 +635,12 @@ body {
       </div>
 
       <div class="normas-block">
-        <div class="p-label">Normas — clic para consultar</div>
+        <div class="p-label-dark">Normas — clic para consultar</div>
         <div id="normasList"></div>
       </div>
 
       <div class="obs-block">
-        <div class="p-label">Observaciones — clic para analizar</div>
+        <div class="p-label-dark">Observaciones — clic para analizar</div>
         <div id="obsList"></div>
       </div>
 
@@ -636,7 +650,7 @@ body {
   <!-- PANEL CENTRAL -->
   <div class="panel-chat">
     <div class="chat-top">
-      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 6px rgba(59,158,255,0.6)"></div>
+      <div class="chat-top-indicator"></div>
       <div class="chat-top-title">Asistente técnico contractual</div>
       <div class="chat-top-sub" id="chatSub">Listo</div>
     </div>
@@ -688,7 +702,6 @@ body {
 </div>
 
 <script>
-// ── ESTADO ──────────────────────────────────────────────────────
 let docData = {};
 let history = [];
 let draftVer = 1;
@@ -696,7 +709,6 @@ let currentDraft = '';
 let typingEl = null;
 let notionWebhook = '';
 
-// Normas por observación
 const normasPorObs = {
   0: ['RNE E.060 Art.5.1.3', 'ACI 318-19 §26.12.3', 'ASTM C39'],
   1: ['RNE E.060 Art.5.12.1', 'ACI 301-16'],
@@ -707,7 +719,6 @@ const normasPorObs = {
   6: ['Contrato Cláusula 18', 'RNE G.030']
 };
 
-// ── INIT ────────────────────────────────────────────────────────
 function getP(n) { return new URLSearchParams(window.location.search).get(n) || ''; }
 
 function init() {
@@ -731,7 +742,6 @@ function init() {
   document.getElementById('topDoc').textContent   = docId + ' · ' + tipo;
   document.getElementById('chatSub').textContent  = 'Contexto: ' + docId;
 
-  // Normas clickeables
   const nl = document.getElementById('normasList');
   normas.split(',').forEach(n => {
     const t = document.createElement('span');
@@ -741,7 +751,6 @@ function init() {
     nl.appendChild(t);
   });
 
-  // Observaciones clickeables
   const ol = document.getElementById('obsList');
   obs.split('|').forEach((o, i) => {
     if (!o.trim()) return;
@@ -759,17 +768,14 @@ function init() {
   currentDraft = borrador;
   renderDraft(borrador);
 
-  addMsg('ai', `Hola, Ing. Residente. He analizado el documento <strong>${docId}</strong>.\n\n<div class="bubble-hl">Identifiqué <strong>${obs.split('|').filter(x=>x.trim()).length} observaciones</strong> con citas a <strong>${normas.split(',').length} normas técnicas</strong>. Plazo límite: <strong>${plazo}</strong>.</div>\nHaga <strong>clic en cualquier observación</strong> del panel izquierdo para análisis automático, o en las normas para consultar su contenido.`);
+  addMsg('ai', `Hola, Ing. Residente. He analizado el documento <strong>${docId}</strong>.\n\n<div class="bubble-hl">Identifiqué <strong>${obs.split('|').filter(x=>x.trim()).length} observaciones</strong> con citas a <strong>${normas.split(',').length} normas técnicas</strong>. Plazo límite: <strong>${plazo}</strong>.</div>\nHaga <strong>clic en cualquier observación</strong> del panel izquierdo para análisis automático, o en las normas para consultar su contenido. También puede escribir directamente aquí.`);
 }
 
-// ── FUNCIONES ORIGINALES (sin cambios) ─────────────────────────
 function analizarObservacion(idx, texto) {
   document.querySelectorAll('.obs-item').forEach(el => el.classList.remove('active'));
   document.getElementById('obs-' + idx).classList.add('active');
-
   const normasRel = normasPorObs[idx] ? normasPorObs[idx].join(', ') : 'normativa aplicable';
   const prompt = `Analiza en detalle la Observación N°${idx+1}: "${texto}". Explica: 1) Por qué es una observación técnica válida o cómo rebatirla, 2) Los artículos exactos de ${normasRel} que aplican, 3) Qué acción correctiva específica se debe proponer, 4) Si representa riesgo contractual. Sé técnico y preciso.`;
-
   sendAutoMsg(prompt, `📋 Analizando Obs. N°${idx+1}...`);
 }
 
@@ -782,7 +788,6 @@ function sendAutoMsg(prompt, label) {
   const input = document.getElementById('userInput');
   input.value = prompt;
   autoResize(input);
-
   const apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey) {
     addMsg('ai', '⚠️ Ingresa tu API Key de OpenAI para continuar.');
@@ -792,30 +797,13 @@ function sendAutoMsg(prompt, label) {
 }
 
 function systemPrompt() {
-  return `Eres ContractCopilot AEC, asistente especializado en gestión contractual y técnica para obras de construcción en Perú.
-
-DOCUMENTO: ${docData.docId} — ${docData.tipo}
-FECHA RECEPCIÓN: ${docData.fecha} | PLAZO: ${docData.plazo} (URGENTE)
-PROYECTO: ${docData.titulo}
-NORMAS APLICABLES: ${docData.normas}
-OBSERVACIONES: ${docData.obs}
-
-BORRADOR ACTUAL (v${draftVer}):
-${currentDraft}
-
-INSTRUCCIONES CRÍTICAS:
-1. Siempre cita artículos ESPECÍFICOS con número exacto (ej: RNE E.060 Art.5.1.3)
-2. Usa terminología técnica de construcción en español peruano
-3. Evalúa riesgos contractuales cuando sea relevante
-4. CUANDO el ingeniero pida generar o actualizar el borrador completo, DEBES terminar tu respuesta con la etiqueta exacta [BORRADOR_ACTUALIZADO] seguida inmediatamente del texto completo del nuevo borrador en formato carta formal. Esta etiqueta es OBLIGATORIA para que el panel se actualice.
-5. No incluyas la etiqueta [BORRADOR_ACTUALIZADO] si solo estás explicando o analizando parcialmente.`;
+  return `Eres ContractCopilot AEC, asistente especializado en gestión contractual y técnica para obras de construcción en Perú.\n\nDOCUMENTO: ${docData.docId} — ${docData.tipo}\nFECHA RECEPCIÓN: ${docData.fecha} | PLAZO: ${docData.plazo} (URGENTE)\nPROYECTO: ${docData.titulo}\nNORMAS APLICABLES: ${docData.normas}\nOBSERVACIONES: ${docData.obs}\n\nBORRADOR ACTUAL (v${draftVer}):\n${currentDraft}\n\nINSTRUCCIONES CRÍTICAS:\n1. Siempre cita artículos ESPECÍFICOS con número exacto (ej: RNE E.060 Art.5.1.3)\n2. Usa terminología técnica de construcción en español peruano\n3. Evalúa riesgos contractuales cuando sea relevante\n4. CUANDO el ingeniero pida generar o actualizar el borrador completo, DEBES terminar tu respuesta con la etiqueta exacta [BORRADOR_ACTUALIZADO] seguida inmediatamente del texto completo del nuevo borrador en formato carta formal.\n5. No incluyas la etiqueta [BORRADOR_ACTUALIZADO] si solo estás explicando o analizando parcialmente.`;
 }
 
 async function sendMsg() {
   const input = document.getElementById('userInput');
   const text = input.value.trim();
   if (!text) return;
-
   const apiKey = document.getElementById('apiKey').value.trim();
   if (!apiKey) return;
 
@@ -823,42 +811,32 @@ async function sendMsg() {
   input.value = '';
   input.style.height = 'auto';
   history.push({ role: 'user', content: text });
-
   showTyping();
   document.getElementById('sendBtn').disabled = true;
 
   try {
     const res = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + apiKey
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + apiKey },
       body: JSON.stringify({
         model: 'gpt-4o',
         max_tokens: 2000,
-        messages: [
-          { role: 'system', content: systemPrompt() },
-          ...history
-        ]
+        messages: [{ role: 'system', content: systemPrompt() }, ...history]
       })
     });
-
     const data = await res.json();
     removeTyping();
-
     if (data.error) {
       addMsg('ai', '⚠️ Error API: ' + data.error.message);
     } else {
       let reply = data.choices[0].message.content;
       history.push({ role: 'assistant', content: reply });
-
       if (reply.includes('[BORRADOR_ACTUALIZADO]')) {
         const parts = reply.split('[BORRADOR_ACTUALIZADO]');
         const chatPart = parts[0].trim();
         const newDraft = parts[1].trim();
-        if (chatPart) addMsg('ai', chatPart + '\n\n<span style="color:var(--green);font-size:11px;font-family:var(--mono)">✓ Panel derecho actualizado con nueva versión</span>');
-        else addMsg('ai', '<span style="color:var(--green);font-size:11px;font-family:var(--mono)">✓ Borrador actualizado en el panel derecho — v' + (draftVer+1) + '</span>');
+        if (chatPart) addMsg('ai', chatPart + '\n\n<span style="color:var(--accent2);font-size:11px;font-family:var(--mono)">✓ Panel derecho actualizado con nueva versión</span>');
+        else addMsg('ai', '<span style="color:var(--accent2);font-size:11px;font-family:var(--mono)">✓ Borrador actualizado en el panel derecho — v' + (draftVer+1) + '</span>');
         updateDraft(newDraft);
       } else {
         addMsg('ai', reply);
@@ -868,7 +846,6 @@ async function sendMsg() {
     removeTyping();
     addMsg('ai', '⚠️ Error de conexión. Verifica tu API Key.');
   }
-
   document.getElementById('sendBtn').disabled = false;
   checkKey();
 }
@@ -877,7 +854,7 @@ function renderDraft(text) {
   const el = document.getElementById('draftText');
   el.innerHTML = text
     .replace(/\n/g, '<br>')
-    .replace(/(RNE [A-Z]\.\d+[A-Z0-9\.\s]*Art\.[^\s,<\n]+)/g, '<span class="norma-inline">$1</span>')
+    .replace(/(RNE [A-Z]\.\d+[A-Z0-9\.]*\s*Art\.[^\s,<\n]+)/g, '<span class="norma-inline">$1</span>')
     .replace(/(RNE [A-Z]\.\d+[0-9]*)/g, '<span class="norma-inline">$1</span>')
     .replace(/(ACI \d+[A-Z0-9\-§\.]*)/g, '<span class="norma-inline">$1</span>')
     .replace(/(ASTM [A-Z]\d+[A-Z0-9\-]*)/g, '<span class="norma-inline">$1</span>')
@@ -898,7 +875,6 @@ function updateDraft(text) {
 function addMsg(role, html) {
   const msgs = document.getElementById('messages');
   const time = new Date().toLocaleTimeString('es-PE', { hour:'2-digit', minute:'2-digit' });
-
   const formatted = html
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\n\n/g, '<br><br>')
@@ -906,10 +882,8 @@ function addMsg(role, html) {
     .replace(/(RNE [A-Z]\.\d+[A-Z0-9\.]*)/g, '<span class="norma-inline">$1</span>')
     .replace(/(ACI \d+[A-Z0-9\-§]*)/g, '<span class="norma-inline">$1</span>')
     .replace(/(ASTM [A-Z]\d+[A-Z0-9\-]*)/g, '<span class="norma-inline">$1</span>');
-
   const label = role === 'ai' ? 'CC' : 'IR';
   const ts = role === 'ai' ? time + ' — ContractCopilot' : time + ' — Ing. Residente';
-
   const d = document.createElement('div');
   d.className = 'msg ' + role;
   d.innerHTML = `<div class="avatar ${role}">${label}</div><div><div class="bubble">${formatted}</div><div class="ts">${ts}</div></div>`;
@@ -931,7 +905,6 @@ function removeTyping() { if(typingEl){ typingEl.remove(); typingEl=null; } }
 async function approveResponse() {
   document.getElementById('approveBtn').disabled = true;
   document.getElementById('approveBtn').textContent = 'Guardando en Notion...';
-
   const payload = {
     docId: docData.docId,
     respuestaFinal: currentDraft,
@@ -939,7 +912,6 @@ async function approveResponse() {
     fechaAprobacion: new Date().toISOString(),
     version: draftVer
   };
-
   if (notionWebhook) {
     try {
       await fetch(notionWebhook, {
@@ -949,13 +921,11 @@ async function approveResponse() {
       });
     } catch(e) { console.warn('Webhook error:', e); }
   }
-
   document.getElementById('approvedOk').style.display = 'block';
   document.getElementById('approveBtn').style.display = 'none';
   document.getElementById('docEstado').textContent = 'APROBADO';
   document.getElementById('docEstado').className = 'chip chip-green';
-
-  addMsg('ai', '✅ <strong>Respuesta aprobada.</strong> La versión ' + draftVer + ' fue guardada en Notion.');
+  addMsg('ai', '✅ <strong>Respuesta aprobada.</strong> La versión ' + draftVer + ' fue guardada en Notion. Ref: <span class="norma-inline">RESP-' + docData.docId + '-' + new Date().toISOString().slice(0,10) + '</span>');
 }
 
 function copyDraft() {
@@ -982,45 +952,11 @@ function handleKey(e) {
 
 function autoResize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
 }
 
 function defaultBorrador() {
-  return `San Martín de Porres, 25 de marzo de 2026
-
-Señor Roberto Flores Vega
-Supervisor de Obra — Consorcio Supervisor HSM
-
-Ref.: Respuesta a Carta N°023-2026-SUP-OBRA
-
-Estimado Señor Flores Vega,
-
-En atención a las observaciones técnicas de su carta del 19 de marzo de 2026, el contratista expone lo siguiente:
-
-ESTRUCTURAS — Obs. N°1 (Resistencia concreto):
-Conforme al Art. 5.1.3 del RNE E.060, la evaluación definitiva se realiza a los 28 días. Se programan ensayos adicionales y revisión de procedimientos de curado.
-
-ESTRUCTURAS — Obs. N°2 (Cangrejeras):
-Reparación mediante mortero estructural según Art. 5.12.1 del RNE E.060, restaurando la sección transversal afectada.
-
-ESTRUCTURAS — Obs. N°3 (Estribos):
-Se incorporarán estribos adicionales conforme al Art. 11.5.8.1 del RNE E.060 y los planos de diseño estructural.
-
-ARQUITECTURA — Obs. N°4 (Corredores):
-Se ampliarán a mínimo 2.40m conforme al RNE A.050 para flujo expedito de equipos médicos.
-
-ARQUITECTURA — Obs. N°5 (Rampas):
-Instalación de rampas cumpliendo el RNE A.120 sobre accesibilidad universal.
-
-SANITARIAS — Obs. N°6 (Pendiente tuberías):
-Corrección de ángulos de instalación para alcanzar el 1% reglamentado según IS.010.
-
-CONTRACTUAL — Obs. N°7 (Cronograma):
-Se presentará informe de descargo considerando causas fortuitas y plan de ajuste.
-
-Atentamente,
-Juan Pérez — Ingeniero Residente
-Constructora Andina SAC`;
+  return `San Martín de Porres, 25 de marzo de 2026\n\nSeñor Roberto Flores Vega\nSupervisor de Obra — Consorcio Supervisor HSM\n\nRef.: Respuesta a Carta N°023-2026-SUP-OBRA\n\nEstimado Señor Flores Vega,\n\nEn atención a las observaciones técnicas de su carta del 19 de marzo de 2026, el contratista expone lo siguiente:\n\nESTRUCTURAS — Obs. N°1 (Resistencia concreto):\nConforme al Art. 5.1.3 del RNE E.060, la evaluación definitiva se realiza a los 28 días. Se programan ensayos adicionales y revisión de procedimientos de curado.\n\nESTRUCTURAS — Obs. N°2 (Cangrejeras):\nReparación mediante mortero estructural según Art. 5.12.1 del RNE E.060, restaurando la sección transversal afectada.\n\nESTRUCTURAS — Obs. N°3 (Estribos):\nSe incorporarán estribos adicionales conforme al Art. 11.5.8.1 del RNE E.060 y los planos de diseño estructural.\n\nARQUITECTURA — Obs. N°4 (Corredores):\nSe ampliarán a mínimo 2.40m conforme al RNE A.050 para flujo expedito de equipos médicos.\n\nARQUITECTURA — Obs. N°5 (Rampas):\nInstalación de rampas cumpliendo el RNE A.120 sobre accesibilidad universal.\n\nSANITARIAS — Obs. N°6 (Pendiente tuberías):\nCorrección de ángulos de instalación para alcanzar el 1% reglamentado según IS.010.\n\nCONTRACTUAL — Obs. N°7 (Cronograma):\nSe presentará informe de descargo considerando causas fortuitas y plan de ajuste.\n\nAtentamente,\nJuan Pérez — Ingeniero Residente\nConstructora Andina SAC`;
 }
 
 function defaultObs() {
